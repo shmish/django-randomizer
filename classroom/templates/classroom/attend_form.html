@@ -1,0 +1,9 @@
+
+TESTt
+<form action="{% url 'classroom:students' %}" method="post">
+	{% csrf_token %}
+        <select name="namedrop">
+            {% for room in
+        </select>
+		<input type="submit" value="submit" />
+</form>

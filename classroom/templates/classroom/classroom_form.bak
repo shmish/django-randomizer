@@ -1,0 +1,24 @@
+{% extends 'classroom/base.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="twelve columns">
+            <h1>Class/Block Entry</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="one-third columns">
+            <form action="{% url 'classroom:classroom' %}" method="post">
+	            {% csrf_token %}
+	            {{ form.as_p }}
+	            <input type="submit" value="submit" />
+            </form>
+        </div>
+    </div>
+    <div class="one-third column"><a href ="{% url 'classroom:blocklist' %}" class="button" style="color:#999999">CLICK HERE TO DELETE A BLOCK</a>
+    </div>
+
+</div>
+{% endblock %}
+

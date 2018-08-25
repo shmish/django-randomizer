@@ -1,0 +1,200 @@
+{% extends 'classroom/base.html' %}
+
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="two columns">
+            <div id="djangorandom">
+            {{ classroom.id }}
+            <form action="{% url 'classroom:random' %}" method="get">
+                {% csrf_token %}
+                    <select name="class_block">
+                        {% for room in classroom %}
+                            <option value={{ room.course_block }}>{{ room.get_course_block_display }}</option>
+                        {% endfor %}
+                    </select>
+                <span><input type="submit" value="submit" /></span>
+            </form>
+            </div>
+        </div>
+        <div class="ten columns">
+                <button id="go">&raquo; Run</button>
+                <button id="stop">&raquo; Stop</button>
+                <a href ="{% url 'classroom:classroom' %}" class="button" style="color:#999999">CLICK HERE TO ADD A CLASS</a>
+                <a href ="{% url 'classroom:blocklist' %}" class="button" style="color:#999999">CLICK HERE TO DELETE A BLOCK</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="ten columns">
+            <div id="student-column"></div>  <!-- anchor element for js -->
+        </div>
+        <div class="two columns">
+            <div id="student-choice"></div>  <!-- anchor for student choice -->
+        </div>
+
+    </div>
+
+
+</div>
+{% endblock body %}
+<div>
+{% block extra_js %}
+            <script>
+                //var nameArray = {{ student_names | safe }}
+                var nameArray = {{ data | safe }};
+                console.log(typeof(nameArray))
+                console.log(nameArray)
+                
+                var numberStudents = nameArray.length;
+                var interval;
+                var loopAllowed = false;
+                var attend = [];
+                
+                for(var n = 0; n < numberStudents; n++) {
+                    attend[n] = nameArray[n].fields.attend;
+                    };
+
+                var studentCol = document.getElementById('student-column');
+                var studentChoice = document.getElementById('student-choice');
+
+                var vertGap = 30;
+
+                var divChoice = document.createElement('div');
+                
+                divChoice.id = "choicename";
+                divChoice.style.position = "relative";
+                divChoice.style.top = "570px";
+                divChoice.style.left  = "500px";
+                divChoice.innerHTML = " ";
+                studentChoice.appendChild(divChoice);
+
+                var setNames = function() {
+                    var h = 0;
+                    for(var n = 0; n < numberStudents; n++){   <!-- place the names on the screen -->
+                    //for(var n = 0; )
+                        var extraW = 0;
+                        var w = 0;
+                        var divName = "floatName" + n;
+                        var names = nameArray[n].fields.nickname;
+                        var divTag = document.createElement('div');
+                        divTag.id = divName;
+                        divTag.innerHTML = names;
+                        divTag.style.position = "absolute";
+                        //console.log(attend);
+                        if (attend[n] == true) {
+                            divTag.style.textDecoration = "none";
+                        } else {
+                            divTag.style.textDecoration = "line-through";
+                            divTag.style.color = 'red';
+                        };
+
+                        w = Math.floor(n/10)*120;  <!-- shift the columns to the right by 120 -->
+                        h = n - Math.floor(n/10)*10;  <!-- go back up to the top of the name column -->
+                        divTag.style.top = (100 + h * vertGap) + "px";
+                        divTag.style.left  = (50 + w) + "px";
+                        divTag.className = "randomFloat";
+                        divTag.onclick = boldText;
+                         
+                        studentCol.appendChild(divTag); <!-- attach to studentCol/'anchor'/parent element -->
+                        };
+                    };
+                setNames();
+               
+                <!-- $( "#go" ).click(function() { -->
+                    <!-- console.log("it's go time"); -->
+                    <!-- var cleanDiv = document.getElementById("choicename"); -->
+                    <!-- cleanDiv.remove(); -->
+                    <!-- loopAllowed = true; -->
+                    <!-- var max = 30; -->
+                    <!-- var loop = function(){ -->
+                      <!-- for(var i = 0; i < (numberStudents + 1); i++){ -->
+                        <!-- var divName = "floatName" + i; -->
+                        <!-- if (attend[i] == true) { -->
+                            <!-- $( "#" + divName ).animate({ -->
+                                <!-- left: (Math.random()*500+150) + "px", -->
+                                <!-- top: (Math.random()*350 + 150) + "px" -->
+                            <!-- }, 500, i === max - 1 && loopAllowed ? loop : undefined); -->
+                        <!-- } -->
+                      <!-- } -->
+                     <!-- }; -->
+                     <!-- loop(); -->
+                    <!-- }); -->
+                    
+                $( "#go" ).click(function() {
+                    console.log("it's go time");
+                    var gotime = 1;
+                    var cleanDiv = document.getElementById("choicename");
+                    cleanDiv.remove();
+                    var max = 30;
+                    interval = setInterval(function () {
+                      for(var i = 0; i < (numberStudents + 1); i++){
+                        var divName = "floatName" + i;
+                        if (attend[i] == true) {
+                            $( "#" + divName ).animate({
+                                left: (Math.random()*500+150) + "px",
+                                top: (Math.random()*350 + 150) + "px"
+                            }, 500, i === max - 1 && loopAllowed ? loop : undefined);
+                            };
+                        };
+                     });
+                    gotime += 1;
+                    if (gotime > 100) {
+                        clearInterval(interval);
+                       }
+                    });
+   
+                $( "#stop" ).click(function() {
+                    //loopAllowed = false;
+                    clearInterval(interval);
+                    choosePerson(0, numberStudents);
+                    setTimeout(clearDivs, 1000);
+                });
+
+                var clearDivs = function() {
+                    for(var i = 0; i < (numberStudents); i++) {
+                        divn = "floatName" + i;
+                        var elem = document.getElementById(divn);
+                        elem.remove();
+                        };
+                    setNames();
+                    };
+
+                function choosePerson (min, max) {
+                    min = Math.ceil(min);
+                    max = Math.floor(max);
+                    var rn = Math.floor(Math.random() * (max - min)) + min;
+                    if (attend[rn] == false) {
+                        console.log(rn);
+                        console.log("choose again");
+                        return choosePerson(0, numberStudents);
+                    };
+                    divChoice.innerHTML = nameArray[rn].fields.nickname;
+                    divChoice.style.position = "absolute";
+                    divChoice.style.top = "100px";
+                    studentChoice.appendChild(divChoice);
+
+                    };
+                                      
+                function boldText(){
+                    var togname = this.id.split('floatName').join('');
+                    console.log(togname);
+                    var nam = nameArray[togname];
+                    console.log(nam);
+                    if (this.style.textDecoration == 'none') {
+                        this.style.textDecoration = 'line-through';
+                        this.style.color = 'red';
+                        attend[togname] = false;
+                    } else {
+                        this.style.textDecoration = 'none';
+                        this.style.color = 'black';
+                        attend[togname] = true;
+                    }
+                    //console.log(attend[togname]);
+                    };
+
+            </script>
+</div>
+{% endblock extra_js %}
+
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>{% load static %}
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>CES - {% block body_block %}Claim, Evidence, Significance{% endblock %}</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="http://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans|Lato|Droid+Serif|Volkhov:400italic|Droid+Sans' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="{% static "css/normalize.css" %}">
+  <link rel="stylesheet" href="{% static "css/skeleton.css" %}">
+  <link rel="stylesheet" href="{% static "css/layout.css" %}">
+  
+  <!-- JAVASCRIPT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <!-- <script type="text/javascript" language="Javascript" src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.11.3.min.js"></script> -->
+  <script type="text/javascript" language="Javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.0.min.js"></script>
+  
+<!-- Favicons
+	================================================== -->
+<!--	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">-->
+    {% block extra_css %}{% endblock extra_css %}
+
+</head>
+<body>
+
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  {% block header %}
+  <div class="band header">
+    <div class="container">
+      <div class="row">
+			<div class="twelve columns">
+				<img src="{% static "images/header1.png" %}">
+				<span class="righttext">The 2017/18 Edition</span>
+				<hr />
+			</div>
+      </div><!-- row -->
+    </div><!-- container -->
+  </div><!-- band header -->
+  {% endblock %}
+  {% block body %}{% endblock body %}
+  {% block extra_js %}{% endblock extra_js %}
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

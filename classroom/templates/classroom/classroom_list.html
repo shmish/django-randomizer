@@ -1,0 +1,33 @@
+{% extends 'classroom/base.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="twelve columns">
+            <h1>Classroom / Block List</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="twelve columns">
+            <div class="six columns">
+                <ul>
+                {% for block in classroom_blocks %}
+                    <li>{{ block.get_course_block_display }}<a href ="{% url 'classroom:blockDelete' block.id %}" class="btn btn-default">DELETE</a></li>
+                {% empty %}
+                    <li>No classes set up yet.</li>
+                {% endfor %}
+                </ul>
+            </div>
+            <div class="six columns">
+                <a href ="{% url 'admin:index' %}" class="btn btn-default">EDIT CLASSES</a>
+            </div>
+            <div class="six columns">
+                <a href ="{% url 'classroom:classroom' %}" class="btn btn-default">ADD NEW CLASSES</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
