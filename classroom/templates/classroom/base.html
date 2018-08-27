@@ -65,6 +65,7 @@
             <li><a href={% url 'admin:index' %}>Admin</a></li>
             <li><a href={% url 'classroom:blocklist' %}>Classlist</a></li>
             <li><a href={% url 'classroom:random' %}>Randomize</a></li>
+            <li>{{request.user.username}}</li>
             <li><a href={% url 'account_logout' %}>Log out</a></li>
         {% else %}
             <li><a href={% url 'classroom:blocklist' %}>Classlist</a></li>

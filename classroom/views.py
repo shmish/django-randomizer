@@ -33,9 +33,15 @@ class ClassroomCreateView(LoginRequiredMixin, CreateView):
     redirect_field_name = 'redirect_to'
     model = Classroom
     form_class = ClassroomForm
+    
+    def form_valid(self, form):
+        f = form.save(commit=False)
+        f.teacher = self.request.user
+        f.save()
+        return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('classroom:block')
+        return reverse('classroom:blocklist')
 
 create_classroom_view = ClassroomCreateView.as_view()
 
@@ -47,7 +53,7 @@ class BlockListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(BlockListView, self).get_context_data(**kwargs)
-        classroom_blocks = Classroom.objects.all()
+        classroom_blocks = Classroom.objects.filter(teacher=self.request.user)
         context = {'classroom_blocks': classroom_blocks}
         return context
 
@@ -63,7 +69,7 @@ delete_classroom_view = BlockDeleteView.as_view()
 
 class BlockUpdateView(LoginRequiredMixin, UpdateView):
     #login_url = '/login/'
-    redirect_field_name = 'redirect_to'    
+    #redirect_field_name = 'redirect_to'    
     model = Classroom
     fields = ['class_list']
     #fields = ['course_name', 'course_block', 'class_list']
@@ -73,7 +79,7 @@ update_classroom_view = BlockUpdateView.as_view()
 
 @login_required
 def random(request):
-    classroom = Classroom.objects.all().order_by('course_block')
+    classroom = Classroom.objects.filter(teacher=request.user).order_by('course_block')
     classblock = request.GET.get('class_block')
     cblock = Classroom.objects.all().filter(course_block=classblock)
     cblocknum = cblock.count()
