@@ -1,14 +1,14 @@
 from django.conf.urls import url, include
 from django.urls import path
 from . import views
-#from classroom.views import create_classroom_view, randomize, list_classroom_view, delete_classroom_view
 from classroom.views import create_classroom_view, list_classroom_view, delete_classroom_view, update_classroom_view
 
 app_name = "classroom"
 urlpatterns = [
     path('', views.index, name='index'),
     path('submitted', views.submitted, name='submitted'),
-    path('classup/', create_classroom_view, name='classroom'),
+    #path('classup/', create_classroom_view, name='classroom'),
+    path('classup/', views.get_classlist, name='classroom'),
     path('random/', views.random, name='random'),
     #path('block/', views.block, name='block'),
     path('blocklist/', list_classroom_view, name='blocklist'),
