@@ -34,17 +34,37 @@ class ClassroomCreateView(LoginRequiredMixin, CreateView):
     model = Classroom
     form_class = ClassroomForm
     
+    #send user to ClassroomForm to initialise custom field
+##    def get_form_kwargs(self):
+##        kwargs = super(ClassroomCreateView, self).get_form_kwargs()
+##        kwargs['teacher'] = self.request.user
+##        return kwargs
+    
     def form_valid(self, form):
         f = form.save(commit=False)
+        print(form.cleaned_data['class_block'])
         f.teacher = self.request.user
-        f.save()
+        f.save()            
         return super().form_valid(form)
-
+       
     def get_success_url(self):
         return reverse('classroom:blocklist')
-
+    
 create_classroom_view = ClassroomCreateView.as_view()
 
+def get_classlist(request):
+    if request.method == 'POST':
+        form = ClassroomForm(request.POST)
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.teacher = request.user
+            f.save()  
+            return HttpResponseRedirect('/classroom/blocklist')
+
+    else:
+        form = ClassroomForm()
+
+    return render(request, 'classroom/classroom_form.html', {'form': form})
 
 class BlockListView(LoginRequiredMixin, ListView):
     #login_url = 'accounts/login/'

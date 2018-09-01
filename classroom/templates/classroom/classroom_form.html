@@ -3,20 +3,25 @@
 {% block body %}
 <div class="container">
     <div class="row">
-        <div class="twelve columns">
+        <div class="col-md-12">
             <h1>Class/Block Entry</h1>
         </div>
     </div>
     <div class="row">
-        <div class="one-third columns">
+        <div class="col-md-4">
+            <!-- <form method="POST" action="/classroom/blocklist/"> -->
+            
+
             <form action="{% url 'classroom:classroom' %}" method="post">
 	            {% csrf_token %}
 	            {{ form.as_p }}
-	            <input type="submit" value="submit" />
+	            <input type="submit" class="btn btn-default" value="submit" />
             </form>
         </div>
     </div>
-    <div class="one-third column"><a href ="{% url 'classroom:blocklist' %}" class="button" style="color:#999999">CLICK HERE TO DELETE A BLOCK</a>
+    <div class="row">
+        <div class="col-md-4"><a href ="{% url 'classroom:blocklist' %}" class="btn btn-default">CLICK HERE TO DELETE A BLOCK</a>
+        </div>
     </div>
 
 </div>
