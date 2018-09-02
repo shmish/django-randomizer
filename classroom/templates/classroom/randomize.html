@@ -22,6 +22,7 @@
         <div class="col-md-10">
                 <button class="btn btn-success" type="submit" id="go">&raquo; Run</button>
                 <button class="btn btn-danger" type="submit" id="stop">&raquo; Stop</button>
+                <button class="btn btn-danger" type="submit" id="freeze">&raquo; Freeze</button>
                 <a class="btn btn-default" href="{% url 'classroom:classroom' %}" role="button">CLICK HERE TO ADD A CLASS</a>
                 <a class="btn btn-default" href="{% url 'classroom:blocklist' %}" role="button">CLICK HERE TO EDIT A CLASS</a>
         </div>
@@ -43,7 +44,6 @@
 
 {% block extra_js %}
             <script>
-                //var nameArray = {{ student_names | safe }}
                 var nameArray = {{ data | safe }};
                 console.log(typeof(nameArray))
                 console.log(nameArray)
@@ -52,6 +52,7 @@
                 var interval;
                 var loopAllowed = false;
                 var attend = [];
+                var groupMade = false;
                 
                 for(var n = 0; n < numberStudents; n++) {
                     attend[n] = nameArray[n].fields.attend;
@@ -60,6 +61,8 @@
                 var studentChoice = document.getElementById('student-choice');
                 var vertGap = 30;
                 var divChoice = document.createElement('div');
+                //var divGroup = document.createElement('div');
+                
                 
                 var offsetsChoice = document.getElementById('student-choice').getBoundingClientRect();
                 var topChoice = offsetsChoice.top;
@@ -70,19 +73,13 @@
                 var leftCol = offsetsCol.left;
                 console.log(topCol);
                 
-                <!-- var divTest = document.createElement('div'); -->
-                <!-- divTest.innerHTML = "TESt"; -->
-                <!-- divTest.style.position = "relative"; -->
-                <!-- divTest.style.top = topCol + "px"; -->
-                <!-- divTest.style.left = leftCol + "px"; -->
-                <!-- studentCol.appendChild(divTest); -->
-                
                 divChoice.id = "choicename";
-                <!-- divChoice.style.position = "relative"; -->
-                <!-- divChoice.style.top = "570px"; -->
-                <!-- divChoice.style.left  = "500px"; -->
+                //divGroup.id = "groupname";
+
                 divChoice.innerHTML = " ";
                 studentChoice.appendChild(divChoice);
+                //studentChoice.appendChild(divGroup);
+
                 var setNames = function() {
                     var h = 0;
                     for(var n = 0; n < numberStudents; n++){   <!-- place the names on the screen -->
@@ -114,33 +111,40 @@
                     
                 $( "#go" ).click(function() {
                     console.log("it's go time");
+                    //clear the previous random name choice if there is one
+                    var divfc = document.getElementById('choicename');
+                    console.log(divfc);
+                    while(divfc.firstChild) {
+                        divfc.removeChild(divfc.firstChild);
+                    };
+                    if (groupMade == true) {
+                        clearGroups();
+                    }
+
                     var gotime = 1;
-                    var cleanDiv = document.getElementById("choicename");
-                    cleanDiv.remove();
-                    var max = 30;
                     interval = setInterval(function () {
-                      for(var i = 0; i < (numberStudents + 1); i++){
-                        var divName = "floatName" + i;
-                        if (attend[i] == true) {
-                            $( "#" + divName ).animate({
-                                left: (Math.random()*500+300) + "px",
-                                top: (Math.random()*350 + 40) + "px"
-                            }, 500, i === max - 1 && loopAllowed ? loop : undefined);
+                        for(var i = 0; i < (numberStudents + 1); i++){
+                            var divName = "floatName" + i;
+                            if (attend[i] == true) {
+                                $( "#" + divName ).css({
+                                    left: (Math.random()*500+300) + "px",
+                                    top: (Math.random()*350 + 40) + "px"
+                                });
                             };
                         };
-                     });
-                    gotime += 1;
-                    if (gotime > 100) {
-                        clearInterval(interval);
-                       }
-                    });
+                        gotime += 1;
+                        if (gotime > 100) {
+                            clearInterval(interval);
+                           }
+                    }, 500);
+                });
    
                 $( "#stop" ).click(function() {
-                    //loopAllowed = false;
                     clearInterval(interval);
                     choosePerson(0, numberStudents);
                     setTimeout(clearDivs, 1000);
                 });
+                
                 var clearDivs = function() {
                     for(var i = 0; i < (numberStudents); i++) {
                         divn = "floatName" + i;
@@ -149,6 +153,19 @@
                         };
                     setNames();
                     };
+                    
+                var clearGroups = function() {
+                    groups = grouping();
+                    for (i = 0; i < groups[0]; i++) {
+                        num = (i+1);
+                        divn = "Group" + num.toString();
+                        var elem = document.getElementById(divn);
+                        elem.remove();
+                        };
+                    groupMade = false;
+                    }; 
+                    
+                    
                 function choosePerson (min, max) {
                     min = Math.ceil(min);
                     max = Math.floor(max);
@@ -160,9 +177,12 @@
                     };
                     divChoice.innerHTML = nameArray[rn].fields.nickname;
                     divChoice.style.position = "relative";
+                    divChoice.style.color = "blue";
+                    divChoice.style.fontWeight = "bold";
                     divChoice.style.top = "10px";
                     divChoice.style.left = "400px";
                     studentChoice.appendChild(divChoice);
+                    console.log(shuffle(numberStudents));
                     };
                                       
                 function boldText(){
@@ -180,6 +200,135 @@
                         attend[togname] = true;
                     }
                     //console.log(attend[togname]);
+                    };
+                    
+                // knuff-shuffle to mix the list of students
+                function shuffle() {
+                    var array = [];
+                    for (var n=0; n<numberStudents; n++) {
+                        array[n-0] = n;
+                    }
+                    var currentIndex = array.length
+                      , temporaryValue
+                      , randomIndex
+                      ;
+
+                    // While there remain elements to shuffle...
+                    while (0 !== currentIndex) {
+
+                      // Pick a remaining element...
+                      randomIndex = Math.floor(Math.random() * currentIndex);
+                      currentIndex -= 1;
+
+                      // And swap it with the current element.
+                      temporaryValue = array[currentIndex];
+                      array[currentIndex] = array[randomIndex];
+                      array[randomIndex] = temporaryValue;
+                    }
+
+                    return array;
+                }
+                    
+                // function for getting the groupings so all groups have 2 or 3 students   
+                function grouping() {
+                    var ns = 0;
+                    // make sure to not count students that are away
+                    for (n=0; n < numberStudents; n++) {
+                        if (attend[n] == true) {
+                            ns++
+                        };
+                    };
+                    
+                    var extras = ns % 3;
+                    var numGroups = [];
+                    var totalGroups = 0;
+                    var threeGroups = Math.floor(ns/3);
+                    
+                    if (extras == 1) {
+                        threeGroups = threeGroups - 1;
+                        numGroups = [threeGroups, ];
+                        console.log(threeGroups);
+                        totalGroups = threeGroups + 1;
+                        console.log("threes extras1")
+                    } else if (extras == 2) {
+                        threeGroups = threeGroups + 1;
+                        numGroups = [threeGroups,0];
+                        totalGroups = threeGroups;
+                        console.log("threes extras2")
+                    } else {
+                        numGroups = [threeGroups,0];
+                        totalGroups = threeGroups;
+                        console.log("threes extras0")
+                    }
+                    
+                    return [totalGroups, ns]; 
+                }
+                
+                function sort() {
+                    var i = 0;
+                    var sortName  = [];
+                    var groupNumbers = [];
+                    var placeCount = 0;
+                    var groupDown = 0;
+                    var groupLeft = 0;
+                    groupMade = true;
+                    var studentAttend = 0;
+                    
+                    // get the random order of students
+                    var groups = grouping();
+                    console.log(groups[0]);
+                    console.log(groups[1]);
+                    
+                    // get the order of the students
+                    var studentOrder = shuffle(nameArray);
+                    console.log(studentOrder);
+                    //var numberRows = groups[0]+groups[1];
+                    for (i = 0; i < groups[0]; i++) {
+                        num = (i+1);
+                        divGroup = document.createElement('div');
+                        divGroup.innerHTML = "Group " + num.toString();
+                        divGroup.id = "Group" + num.toString();
+                        num = num*110-120;
+                        divGroup.style.width = "110px";
+                        divGroup.style.fontWeight = "bold";
+                        divGroup.style.color = "blue";
+                        divGroup.style.position = "absolute";
+                        divGroup.style.top = "100px";
+                        divGroup.style.left = num.toString() + "px";
+                        studentChoice.appendChild(divGroup);
+                    }
+                    for (i = 0; i < numberStudents; i++) {
+                        var divName = "floatName" + studentOrder[i];
+                        var SO = studentOrder[i];
+                        if (attend[SO] == true) {
+                            studentAttend++;
+                            if (placeCount%groups[0] == 0) {
+                                groupDown = groupDown + 50;
+                                groupLeft = 0;
+                            }
+                            $( "#" + divName ).css({
+                                left: (200 + groupLeft) + "px",
+                                top: (100 + groupDown) + "px"
+                            });
+                            groupLeft = groupLeft + 110;
+                            placeCount++;
+                        }
+                    } 
+                };
+               
+                $( "#freeze" ).click(function() {
+                    clearInterval(interval);
+                    setTimeout(sort, 1000);
+                   
+                });
+                
+                var testDivs = function() {
+                    for(var i = 0; i < (numberStudents); i++) {
+                        divn = "floatName" + i;
+                        var elem = document.getElementById(divn);
+                        //elem.remove();
+                        };
+                    setNames();
                     };
             </script>
 </div>

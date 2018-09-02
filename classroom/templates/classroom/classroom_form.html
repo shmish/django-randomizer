@@ -9,9 +9,6 @@
     </div>
     <div class="row">
         <div class="col-md-4">
-            <!-- <form method="POST" action="/classroom/blocklist/"> -->
-            
-
             <form action="{% url 'classroom:classroom' %}" method="post">
 	            {% csrf_token %}
 	            {{ form.as_p }}

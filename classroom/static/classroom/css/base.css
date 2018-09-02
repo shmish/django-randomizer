@@ -1,10 +1,5 @@
 /*
-* Skeleton V1.2
-* Copyright 2011, Dave Gamache
-* www.getskeleton.com
-* Free to use under the MIT license.
-* http://www.opensource.org/licenses/mit-license.php
-* 6/20/2012
+
 */
 
 /* Table of Content
@@ -15,9 +10,21 @@
 	#Font-Face */
 	
 body {
-	font-family: 'Droid Sans', sans-serif;	
-}
+	font-family: 'Droid Sans', sans-serif;
 	
+}
+
+/* for randomizer
+================================================== */
+
+[id*="floatName"] {
+	transition: 0.5s left, 0.5s top;
+} 
+	
+#student-column, #student-choice {
+    font-size: x-large;
+}    
+    
 /* #Site Styles
 ================================================== */
 .band.header {
@@ -116,30 +123,4 @@ img {
 	    font-style: normal; }
 */
 
-/* for randomizer
-================================================== */
-.randomFloat {
-	color: black;
-/*	transition: 0.5s left, 0.5s top; */
-}
 
-/* #Fancy table
-================================================== */
-th.rotate {
-  /* Something you can count on */
-  height: 140px;
-  white-space: nowrap;
-}
-
-th.rotate > div {
-  transform:
-    /* Magic Numbers */
-    translate(25px, 51px)
-    /* 45 is really 360 - 45 */
-    rotate(315deg);
-  width: 30px;
-}
-th.rotate > div > span {
-  border-bottom: 1px solid #ccc;
-  padding: 5px 10px;
-}
