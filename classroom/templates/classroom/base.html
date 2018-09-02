@@ -55,17 +55,16 @@
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-
         <div class="navbar-brand">
-            <img src={% static "classroom/images/vsb-logo.png" %}>
+            <a href="#"><img style="margin-top: -10px;" src={% static "classroom/images/vsb-logo.png" %}></a>
         </div>
     </div>
-    <div class="nav navbar-nav navbar-right">
+    <ul class="nav navbar-nav navbar-right">
         {% if request.user.is_authenticated %}
             <li><a href={% url 'admin:index' %}>Admin</a></li>
             <li><a href={% url 'classroom:blocklist' %}>Classlist</a></li>
             <li><a href={% url 'classroom:random' %}>Randomize</a></li>
-            <li>{{request.user.username}}</li>
+            <li><a href="#">{{request.user.username}}</a></li>
             <li><a href={% url 'account_logout' %}>Log out</a></li>
         {% else %}
             <li><a href={% url 'classroom:blocklist' %}>Classlist</a></li>
@@ -73,9 +72,7 @@
             <li><a href="{% url 'account_signup' %}" role="button">Sign Up</a></li>
         {% endif %}
        
-        
-      </ul>
-    </div>
+    </ul>
   </div><!-- /.container-fluid -->
 </nav>
   {% endblock %}

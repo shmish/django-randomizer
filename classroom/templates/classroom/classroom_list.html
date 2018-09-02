@@ -8,25 +8,24 @@
         </div>
     </div>
     <div class="row">
-        <div class="twelve columns">
-            <div class="six columns">
+            <div class="col-md-3">
                 <ul>
                 {% for block in classroom_blocks %}
-                    <li>{{ block.get_course_block_display }}<a href ="{% url 'classroom:blockDelete' block.id %}" class="btn btn-default">DELETE</a></li>
+                    <li>{{ block.get_course_block_display }}
+                    <a href ="{% url 'classroom:blockDelete' block.id %}" class="btn btn-default">DELETE</a></li>
+            
                 {% empty %}
                     <li>No classes set up yet.</li>
                 {% endfor %}
                 </ul>
             </div>
-            <div class="six columns">
+            <div class="col-md-3">
+            <div class="form-group">
                 <a href ="{% url 'admin:index' %}" class="btn btn-default">EDIT CLASSES</a>
-            </div>
-            <div class="six columns">
                 <a href ="{% url 'classroom:classroom' %}" class="btn btn-default">ADD NEW CLASSES</a>
             </div>
-
+            </div>
         </div>
-    </div>
 
 </div>
 {% endblock %}

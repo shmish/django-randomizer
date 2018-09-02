@@ -9,22 +9,26 @@
             {{ classroom.id }}
                 <form action="{% url 'classroom:random' %}" method="get">
                     {% csrf_token %}
+                    <div class="form-group">
                         <select class="form-control" name="class_block">
                             {% for room in classroom %}
                                 <option value={{ room.course_block }}>{{ room.get_course_block_display }}</option>
                             {% endfor %}
                         </select>
+                    </div>
                     <span><input class="btn btn-default" type="submit" value="Submit"></span>
                 </form>
 
             </div>
         </div>
         <div class="col-md-10">
+            <div class="btn-toolbar">
                 <button class="btn btn-success" type="submit" id="go">&raquo; Run</button>
-                <button class="btn btn-danger" type="submit" id="stop">&raquo; Stop</button>
-                <button class="btn btn-danger" type="submit" id="freeze">&raquo; Freeze</button>
+                <button class="btn btn-warning" type="submit" id="stop">&raquo; Random Name</button>
+                <button class="btn btn-warning" type="submit" id="freeze">&raquo; Random Groups</button>
                 <a class="btn btn-default" href="{% url 'classroom:classroom' %}" role="button">CLICK HERE TO ADD A CLASS</a>
                 <a class="btn btn-default" href="{% url 'classroom:blocklist' %}" role="button">CLICK HERE TO EDIT A CLASS</a>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -48,6 +52,9 @@
                 console.log(typeof(nameArray))
                 console.log(nameArray)
                 
+                var N = 3; // group size
+                var previousGroups = 0;  // # groups of previous freeze
+                
                 var numberStudents = nameArray.length;
                 var interval;
                 var loopAllowed = false;
@@ -60,9 +67,7 @@
                 var studentCol = document.getElementById('student-column');
                 var studentChoice = document.getElementById('student-choice');
                 var vertGap = 30;
-                var divChoice = document.createElement('div');
-                //var divGroup = document.createElement('div');
-                
+                var divChoice = document.createElement('div');             
                 
                 var offsetsChoice = document.getElementById('student-choice').getBoundingClientRect();
                 var topChoice = offsetsChoice.top;
@@ -74,11 +79,9 @@
                 console.log(topCol);
                 
                 divChoice.id = "choicename";
-                //divGroup.id = "groupname";
 
                 divChoice.innerHTML = " ";
                 studentChoice.appendChild(divChoice);
-                //studentChoice.appendChild(divGroup);
 
                 var setNames = function() {
                     var h = 0;
@@ -117,8 +120,11 @@
                     while(divfc.firstChild) {
                         divfc.removeChild(divfc.firstChild);
                     };
+                    
+                    // get the number of kids attending before clearGroups
+                    group = grouping(N);
                     if (groupMade == true) {
-                        clearGroups();
+                        clearGroups(group[0]);
                     }
 
                     var gotime = 1;
@@ -155,13 +161,14 @@
                     };
                     
                 var clearGroups = function() {
-                    groups = grouping();
-                    for (i = 0; i < groups[0]; i++) {
+                    console.log(previousGroups);
+                    for (i = 0; i < previousGroups; i++) {  //remove the previous # of groups
                         num = (i+1);
-                        divn = "Group" + num.toString();
+                        var divn = "Group" + num.toString();
                         var elem = document.getElementById(divn);
                         elem.remove();
                         };
+                    clearDivs();
                     groupMade = false;
                     }; 
                     
@@ -228,9 +235,8 @@
 
                     return array;
                 }
-                    
-                // function for getting the groupings so all groups have 2 or 3 students   
-                function grouping() {
+                
+                function grouping(e) {
                     var ns = 0;
                     // make sure to not count students that are away
                     for (n=0; n < numberStudents; n++) {
@@ -239,28 +245,16 @@
                         };
                     };
                     
-                    var extras = ns % 3;
+                    var extras = ns % e;
                     var numGroups = [];
                     var totalGroups = 0;
-                    var threeGroups = Math.floor(ns/3);
+                    var threeGroups = Math.floor(ns/e);
                     
-                    if (extras == 1) {
-                        threeGroups = threeGroups - 1;
-                        numGroups = [threeGroups, ];
-                        console.log(threeGroups);
+                    if (extras != 0) {
                         totalGroups = threeGroups + 1;
-                        console.log("threes extras1")
-                    } else if (extras == 2) {
-                        threeGroups = threeGroups + 1;
-                        numGroups = [threeGroups,0];
-                        totalGroups = threeGroups;
-                        console.log("threes extras2")
                     } else {
-                        numGroups = [threeGroups,0];
                         totalGroups = threeGroups;
-                        console.log("threes extras0")
                     }
-                    
                     return [totalGroups, ns]; 
                 }
                 
@@ -275,9 +269,10 @@
                     var studentAttend = 0;
                     
                     // get the random order of students
-                    var groups = grouping();
+                    var groups = grouping(N);
                     console.log(groups[0]);
                     console.log(groups[1]);
+                    previousGroups = groups[0];
                     
                     // get the order of the students
                     var studentOrder = shuffle(nameArray);
@@ -322,14 +317,14 @@
                    
                 });
                 
-                var testDivs = function() {
+/*                var testDivs = function() {
                     for(var i = 0; i < (numberStudents); i++) {
                         divn = "floatName" + i;
                         var elem = document.getElementById(divn);
                         //elem.remove();
                         };
                     setNames();
-                    };
+                    }; */
             </script>
 </div>
 {% endblock extra_js %}
