@@ -29,7 +29,7 @@ config.read(os.path.join(PROJECT_ROOT, 'config.ini'))
 SECRET_KEY = config['general']['secretkey']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -127,10 +127,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config['databaseconfig']['db'],
-#		'USER': config['databaseconfig']['user'],
-#		'PASSWORD': config['databaseconfig']['password'],
-#		'HOST': '127.0.0.1',
-#		'PORT': '5432',
+		'USER': config['databaseconfig']['user'],
+		'PASSWORD': config['databaseconfig']['password'],
+		'HOST': '127.0.0.1',
+		'PORT': '5432',
     }
 }
 
