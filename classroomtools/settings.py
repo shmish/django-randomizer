@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
+
 import os
+from decouple import config
 import configparser
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -22,14 +24,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Read config.ini
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-config = configparser.ConfigParser()
-config.read(os.path.join(PROJECT_ROOT, 'config.ini'))
+
+#use the config lines below if using configparser with .ini file
+#config = configparser.ConfigParser()
+#config.read(os.path.join(PROJECT_ROOT, 'config.ini'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config['general']['secretkey']
+#SECRET_KEY = config['general']['secretkey']
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -69,12 +74,15 @@ LOGIN_REDIRECT_URL = "/randomizer/"
 ACCOUNT_LOGOUT_REDIRECT_URL = "/accounts/login"
 
 # setup email
-EMAIL_HOST = config['emailconfig']['emailhost']
-EMAIL_HOST_USER = config['emailconfig']['username']
-EMAIL_HOST_PASSWORD = config['emailconfig']['password']
+#EMAIL_HOST = config['emailconfig']['emailhost']
+#EMAIL_HOST_USER = config['emailconfig']['username']
+#EMAIL_HOST_PASSWORD = config['emailconfig']['password']
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_HOST_USER = config('EMAIL_USERNAME')
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-EMAIL_PORT = '587'
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
 
 MIDDLEWARE = [
@@ -124,14 +132,17 @@ WSGI_APPLICATION = 'classroomtools.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config['databaseconfig']['db'],
-		'USER': config['databaseconfig']['user'],
-		'PASSWORD': config['databaseconfig']['password'],
-		'HOST': '127.0.0.1',
-		'PORT': '5432',
-    }
+    'default': django_database_url.config(
+        default=config('DB_NAME')
+    )
+##    'default': {
+##        'ENGINE': 'django.db.backends.postgresql',
+##        'NAME': config('DB_NAME'),
+##		'USER': config('DB_USER'),
+##		'PASSWORD': config('DB_PASSWORD'),
+##		'HOST': config('DB_HOST'),
+##		'PORT': config('DB_PORT', cast=int),
+##    }
 }
 
 

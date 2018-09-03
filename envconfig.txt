@@ -1,0 +1,15 @@
+Configure the settings below and then save as .env
+
+SECRET_KEY=
+DEBUG=
+
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+DB_HOST=
+DB_PORT=
+
+EMAIL_USERNAME=
+EMAIL_PASSWORD=
+EMAIL_HOST=
+EMAIL_PORT=
