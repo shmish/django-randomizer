@@ -132,10 +132,13 @@ WSGI_APPLICATION = 'classroomtools.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': django_database_url.config(
-        default=config('DB_NAME')
-    )
+##DATABASES = {
+##    
+##    
+##    
+##    'default': django_database_url.config(
+##        default=config('DB_NAME')
+##    )
 ##    'default': {
 ##        'ENGINE': 'django.db.backends.postgresql',
 ##        'NAME': config('DB_NAME'),
@@ -144,7 +147,17 @@ DATABASES = {
 ##		'HOST': config('DB_HOST'),
 ##		'PORT': config('DB_PORT', cast=int),
 ##    }
-}
+##}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR,'db.sqlite3'),
+        }
+    }
+db_from_env = dj_database_url.config()
+
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
