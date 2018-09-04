@@ -1,0 +1,16 @@
+{% extends 'randomizer/base.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h1>Confirm Delete</h1>
+            <form action="." method="post">{% csrf_token %}
+                <p>Are you sure you want to delete "{{ object.get_course_block_display }}"?</p>
+                <input type="submit" class="btn btn-default" value="Confirm" />
+            </form>
+        </div>
+    </div>
+</div>            
+
+{% endblock %}
