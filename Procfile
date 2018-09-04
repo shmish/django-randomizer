@@ -1,1 +1,1 @@
-web: gunicorn dj-randomizer.wsgi --log-file -
+web: gunicorn classroomtools.wsgi --log-file -
