@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from .models import Classroom
+from django.core.exceptions import ValidationError
 
 class ClassroomForm(ModelForm):
     class Meta:
@@ -11,6 +12,12 @@ class ClassroomForm(ModelForm):
         super(ClassroomForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+            
+    def validate_unique(self):
+        try:
+            self.instance.validate_unique(exclude=None)
+        except ValidationError as e:
+            self._update_errors(e)
           
 ##    def clean_course_block(self):
 ##        course_block = self.cleaned_data['course_block']

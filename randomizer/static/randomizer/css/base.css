@@ -15,22 +15,25 @@ body {
 	
 }
 
+#freezeGroups {
+    width: 70px;
+}
+
+
+
 /* Give vertical spacing on lists */
 
-/* .navbar-default .navbar-nav li, .navbar-default .navbar-nav li a {
-    padding-top: 15px;
-    padding-bottom: 15px;
+/* .navbar-default .navbar-nav li,
+.navbar-default .navbar-nav li a,
+.navbar-default .navbar-nav li p {
+    padding-top: 10px;
+    padding-bottom: 10px;
     margin: 0px;
     position: relative;
     display: block;
     box-sizing: border-box;
-} */
+}  */
 
-/* .navbar-default .navbar-nav li a {
-    padding: 15px;
-    margin: 0px;
-     
-} */
 
 
 /* for randomizer
@@ -38,10 +41,13 @@ body {
 
 [id*="floatName"] {
 	transition: 0.8s left, 0.8s top;
+    width: 110px;
+    font-size: 20px;
 } 
 	
-#student-column, #student-choice {
+#student-column, #student-column, #student-choice {
     font-size: x-large;
+
 }    
     
 /* #Site Styles

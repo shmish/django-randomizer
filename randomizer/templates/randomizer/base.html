@@ -61,12 +61,12 @@
     <ul class="nav navbar-nav navbar-right">
         {% if request.user.is_authenticated %}
             <li><a href={% url 'admin:index' %}>Admin</a></li>
-            <li><a href={% url 'randomizer:blocklist' %}>Classlist</a></li>
+            <li><a href={% url 'randomizer:blocklist' %}>Class List</a></li>
             <li><a href={% url 'randomizer:random' %}>Randomize</a></li>
             <li><a href="#">{{request.user.username}}</a></li>
             <li><a href={% url 'account_logout' %}>Log out</a></li>
         {% else %}
-            <li><a href={% url 'randomizer:blocklist' %}>Classlist</a></li>
+            <li><a href={% url 'randomizer:blocklist' %}>Class List</a></li>
             <li><a href="{% url 'account_login' %}" role="button">Sign In</a></li>
             <li><a href="{% url 'account_signup' %}" role="button">Sign Up</a></li>
         {% endif %}
