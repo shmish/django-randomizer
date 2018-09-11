@@ -10,18 +10,18 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
-from project.settings.base import *
+from .base import *
 from decouple import config
 import dj_database_url
 
 DEBUG = False
-INSTALLED_APPS += (
+INSTALLED_APPS += [
     # other apps for production site
-)
+]
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = config['general']['secretkey']
-SECRET_KEY = config('SECRET_KEY')
+#SECRET_KEY = config('SECRET_KEY')
 
 ALLOWED_HOSTS = ['*']
 
@@ -30,18 +30,8 @@ ALLOWED_HOSTS = ['*']
 
 
 # setup email
-#EMAIL_HOST = config['emailconfig']['emailhost']
-#EMAIL_HOST_USER = config['emailconfig']['username']
-#EMAIL_HOST_PASSWORD = config['emailconfig']['password']
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_HOST_USER = config('EMAIL_USERNAME')
-EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-EMAIL_PORT = config('EMAIL_PORT', cast=int)
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
 
-
+#WSGI
 WSGI_APPLICATION = 'classroomtools.wsgi.application'
 
 

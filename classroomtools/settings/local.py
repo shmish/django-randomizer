@@ -19,35 +19,18 @@ from decouple import config
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = config['general']['secretkey']
-SECRET_KEY = config('SECRET_KEY')
+
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
-    'randomizer.apps.ClassroomConfig',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    
-    # The following apps are required for allauth:
-    #'django.contrib.auth',     -- this is already installed
-    'django.contrib.sites',
+INSTALLED_APPS += [
 
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-        
-    #can also include social providers:
 ]
 
 
@@ -55,13 +38,13 @@ INSTALLED_APPS = [
 #EMAIL_HOST = config['emailconfig']['emailhost']
 #EMAIL_HOST_USER = config['emailconfig']['username']
 #EMAIL_HOST_PASSWORD = config['emailconfig']['password']
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_HOST_USER = config('EMAIL_USERNAME')
-EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-EMAIL_PORT = config('EMAIL_PORT', cast=int)
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+##EMAIL_HOST = config('EMAIL_HOST')
+##EMAIL_HOST_USER = config('EMAIL_USERNAME')
+##EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
+##EMAIL_USE_TLS = True
+##DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+##EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
 
 
 # Database
