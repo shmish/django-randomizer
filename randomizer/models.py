@@ -49,11 +49,19 @@ class Classroom(models.Model):
     def save(self, *args, **kwargs):
         super(Classroom, self).save(*args, **kwargs)
         # overrides the default save function to parse the class list
-        studentList = []
-        studentList = self.class_list.split('\n')
-        for line in studentList:
+        student_list = []
+        student_list = self.class_list.split('\n')
+        for line in student_list:
             line = line.strip('\r')
-            s = Student.objects.create(nickname = line, attend = True, classroom = self)
+            all_names = line.split()
+            num_names = len(all_names)
+            if num_names == 2:
+                last = all_names[1]
+            else:
+                last = ' '
+            nick = all_names[0] + last[:1]
+            Student.objects.create(nickname=nick, student_first=all_names[0],
+                                   student_last=last, attend=True, classroom=self)
 
 class Student(models.Model):
     #user = models.ForeignKey(teacher, on_delete=models.CASCADE, default=1)
@@ -62,6 +70,7 @@ class Student(models.Model):
     student_last = models.CharField(default='Smith', max_length=30)
     nickname = models.CharField(default='JohnS', max_length=31)
     attend = models.BooleanField(default=True)
+    do_not_pick = models.BooleanField(default=False)
     
 
 class StudentFilter(django_filters.FilterSet):

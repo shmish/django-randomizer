@@ -8,10 +8,12 @@
     var numberStudents = nameArray.length;
     var interval;  // for the interval function that scrambles the names
     var attend = [];
+    var no_pick = [];
     var groupMade = false;
     
     for(var n = 0; n < numberStudents; n++) {
         attend[n] = nameArray[n].fields.attend;
+        no_pick[n] = nameArray[n].fields.do_not_pick;
         };
     var studentCol1 = document.getElementById('student-column1');
     var studentCol2 = document.getElementById('student-column2');
@@ -25,7 +27,7 @@
 
     var setNames = function() {
         var h = 0;
-        for(var n = 0; n < numberStudents; n++){   <!-- place the names on the screen -->
+        for(var n = 0; n < numberStudents; n++){   // place the names on the screen
             var w = 0;
             var divName = "floatName" + n;
             var names = nameArray[n].fields.nickname;
@@ -52,7 +54,7 @@
                 studentCol2.appendChild(divTag);
             } else {
                 studentCol1.appendChild(divTag);
-             <!-- attach to studentCol/'anchor'/parent element -->
+            // attach to studentCol/'anchor'/parent element
             }; 
         };
     };
@@ -130,11 +132,13 @@
         min = Math.ceil(min);
         max = Math.floor(max);
         var rn = Math.floor(Math.random() * (max - min)) + min;
-        if (attend[rn] == false) {
-            console.log(rn);
-            console.log("choose again");
-            return choosePerson(0, numberStudents);
+        console.log("is this working");
+        while (attend[rn] == false || no_pick[rn] == true) {
+            rn = Math.floor(Math.random() * (max - min)) + min;
+            console.log("try again");
         };
+        console.log(no_pick[rn]);
+        console.log(attend[rn]);
         divChoice.innerHTML = nameArray[rn].fields.nickname;
         divChoice.style.position = "relative";
         divChoice.style.color = "blue";
@@ -142,7 +146,6 @@
         divChoice.style.top = "10px";
         divChoice.style.left = "400px";
         studentChoice.appendChild(divChoice);
-        console.log(shuffle(numberStudents));
         };
                           
     function boldText(){

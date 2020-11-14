@@ -105,7 +105,7 @@ def random(request):
     cblocknum = cblock.count()
     students = Student.objects.all().filter(classroom__course_block=classblock)
     nicknames = [s.nickname for s in students]
-    data = serializers.serialize("json", students, fields = ("nickname", "attend"))
+    data = serializers.serialize("json", students, fields = ("nickname", "attend", "do_not_pick",))
     student_names = json.dumps(list(nicknames))
     context = {'students': students}
     context['classroom'] = classroom

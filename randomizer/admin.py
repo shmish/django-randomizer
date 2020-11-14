@@ -39,7 +39,7 @@ def get_loggedUser(self,request):
         return False
     
 class StudentAdmin(admin.ModelAdmin):
-    fields = ('nickname', 'student_first',)
+    fields = ('nickname', 'student_first', 'student_last', 'do_not_pick',)
     list_display = ('nickname',)
     #list_filter = ('classroom__teacher',)
     list_filter = (ClassListFilter,)
